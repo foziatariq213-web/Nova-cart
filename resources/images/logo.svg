@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 60">
+  <text x="10" y="40" font-family="Arial" font-size="32" font-weight="bold" fill="#7c3aed">🛒</text>
+  <text x="50" y="40" font-family="Arial" font-size="28" font-weight="bold" fill="white">Nova</text>
+  <text x="130" y="40" font-family="Arial" font-size="28" font-weight="bold" fill="#7c3aed">Cart</text>
+</svg>
