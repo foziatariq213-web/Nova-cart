@@ -2,10 +2,7 @@
 
 A modern e-commerce web application built with **Laravel** and **MySQL**, featuring a full shopping flow (products → cart → checkout → orders), an admin dashboard, and two unique discovery features: **Mood Shop** and **Gift Finder**.
 
-<!-- Add 2–3 screenshots here. GitHub par image add karne ka tareeqa:
-     repo mein `screenshots/` folder banao, images push karo, phir:
-     ![Homepage](screenshots/homepage.png)
--->
+![NovaCart Home](screenshots/02-home.png)
 
 ## ✨ Features
 
@@ -26,6 +23,41 @@ A modern e-commerce web application built with **Laravel** and **MySQL**, featur
 | Database | MySQL (Eloquent ORM, migrations, seeders) |
 | Frontend | Blade templates, CSS, JavaScript |
 | Tools | Composer, Git, VS Code |
+
+## 📸 Screenshots
+
+**Login**
+![Login](screenshots/01-login.png)
+
+**Shop — category & price filters**
+![Shop](screenshots/03-shop.png)
+
+**Product Detail**
+![Product Detail](screenshots/04-product-detail.png)
+
+**Wishlist**
+![Wishlist](screenshots/05-wishlist.png)
+
+**Shopping Cart**
+![Cart](screenshots/06-cart.png)
+
+**🎨 Mood Shop — shop by vibe**
+![Mood Shop](screenshots/07-mood-shop.png)
+
+**🎁 Gift Finder — by recipient & occasion**
+![Gift Finder](screenshots/08-gift-finder.png)
+
+**Order Confirmation (Cash on Delivery)**
+![Order Confirmed](screenshots/09-order-confirmed.png)
+
+**Order Tracking**
+![Track Order](screenshots/10-track-order.png)
+
+**Admin Dashboard**
+![Admin Dashboard](screenshots/11-admin-dashboard.png)
+
+**Admin — Product Management**
+![Admin Products](screenshots/12-admin-products.png)
 
 ## 🚀 Getting Started
 
