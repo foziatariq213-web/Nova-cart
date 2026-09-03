@@ -16,6 +16,8 @@ use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\CustomerController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\StripePaymentController;
+use App\Http\Controllers\StripeWebhookController;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,6 +28,17 @@ use App\Http\Controllers\ProfileController;
 Route::get('/', function () {
     return redirect()->route('login');
 });
+
+/*
+|--------------------------------------------------------------------------
+| STRIPE WEBHOOK (server-to-server — no auth, no CSRF)
+|--------------------------------------------------------------------------
+| Stripe's servers call this endpoint directly, so it can't be behind the
+| auth middleware. It is authenticated by the Stripe-Signature header
+| (verified in the controller) and excluded from CSRF in bootstrap/app.php.
+*/
+
+Route::post('/stripe/webhook', [StripeWebhookController::class, 'handle'])->name('stripe.webhook');
 
 /*
 |--------------------------------------------------------------------------
@@ -278,7 +291,11 @@ Route::middleware('auth')->group(function () {
         $fullAddress = $request->address . ', ' . $request->city . ' - ' . $request->postal_code;
 
         $isCod = $request->payment_method === 'Cash on Delivery';
-        $paymentStatus = $isCod ? 'Pending' : 'Paid';
+        $isCard = $request->payment_method === 'Credit Card';
+
+        // COD is collected on delivery; card orders stay Unpaid until Stripe
+        // confirms the charge (webhook / return page marks them Paid).
+        $paymentStatus = $isCod ? 'Pending' : ($isCard ? 'Unpaid' : 'Paid');
 
         $itemsData = [];
         foreach ($cart as $id => $item) {
@@ -331,6 +348,21 @@ Route::middleware('auth')->group(function () {
 
         session()->forget('cart');
 
+        // Card orders: hand over to the secure Stripe payment page
+        // instead of finishing the checkout here.
+        if ($isCard) {
+            if ($request->wantsJson() || $request->ajax()) {
+                return response()->json([
+                    'success'      => true,
+                    'message'      => 'Order created. Redirecting to secure payment…',
+                    'order_number' => $order->order_number,
+                    'redirect_url' => route('checkout.stripe.pay', $order),
+                ]);
+            }
+
+            return redirect()->route('checkout.stripe.pay', $order);
+        }
+
         if ($request->wantsJson() || $request->ajax()) {
             return response()->json([
                 'success'      => true,
@@ -341,6 +373,13 @@ Route::middleware('auth')->group(function () {
 
         return redirect()->route('orders.index')->with('success', 'Order placed successfully.');
     })->name('checkout.store');
+
+    // ==========================================
+    // STRIPE PAYMENT (card orders)
+    // ==========================================
+
+    Route::get('/checkout/pay/{order}', [StripePaymentController::class, 'pay'])->name('checkout.stripe.pay');
+    Route::get('/checkout/stripe/return', [StripePaymentController::class, 'handleReturn'])->name('checkout.stripe.return');
 
     // ==========================================
     // ORDER ROUTES

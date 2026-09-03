@@ -42,7 +42,20 @@
             $paymentBadgeClass = 'bg-amber-500/10 text-amber-400 border-amber-500/20';
             $paymentIcon = 'fa-clock';
         }
-    } 
+    }
+    elseif($order->payment_method === 'Credit Card') {
+        // Card orders ka asli status Stripe se aata hai (webhook DB update
+        // karta hai) — yahan guess nahi, DB wala payment_status dikhao.
+        if($order->payment_status === 'Paid') {
+            $paymentStatus = 'Paid';
+            $paymentBadgeClass = 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20';
+            $paymentIcon = 'fa-circle-check';
+        } else {
+            $paymentStatus = 'Unpaid';
+            $paymentBadgeClass = 'bg-rose-500/10 text-rose-400 border-rose-500/20';
+            $paymentIcon = 'fa-circle-xmark';
+        }
+    }
     else {
         $paymentStatus = 'Paid';
         $paymentBadgeClass = 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20';

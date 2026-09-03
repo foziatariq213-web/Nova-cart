@@ -21,6 +21,7 @@ class Order extends Model
         'total',
         'payment_method',
         'payment_status',
+        'stripe_payment_intent_id',
         'order_status',
         'items',
     ];
@@ -45,6 +46,14 @@ class Order extends Model
     public function items()
     {
         return $this->hasMany(OrderItem::class);
+    }
+
+    /**
+     * Order has many payments (Stripe payment attempts).
+     */
+    public function payments()
+    {
+        return $this->hasMany(Payment::class);
     }
 
     /**
@@ -118,6 +127,12 @@ class Order extends Model
 
         if ($this->payment_method === 'Cash on Delivery') {
             return 'Unpaid';
+        }
+
+        // Card orders carry a real payment state from Stripe — show it as-is
+        // instead of assuming the order is paid.
+        if ($this->payment_method === 'Credit Card') {
+            return $this->payment_status ?: 'Unpaid';
         }
 
         return 'Paid';

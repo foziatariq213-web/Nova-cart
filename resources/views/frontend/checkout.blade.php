@@ -251,6 +251,13 @@
             const data = await response.json();
 
             if (response.ok && data.success) {
+                // Card orders: server sends the Stripe payment page URL —
+                // go there instead of showing the inline success screen.
+                if (data.redirect_url) {
+                    window.location.href = data.redirect_url;
+                    return;
+                }
+
                 this.orderSuccess = true;
                 this.orderNumber = data.order_number;
                 window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -414,26 +421,15 @@
                                         </div>
                                     </label>
 
-                                    {{-- CARD DYNAMIC INPUTS --}}
-                                    <div x-show="payment == 'Credit Card'" x-transition x-cloak class="mt-2 space-y-4 bg-black/30 p-5 rounded-2xl border border-white/5">
-                                        <div>
-                                            <label class="text-gray-400 text-xs uppercase font-semibold">Cardholder Name</label>
-                                            <input type="text" name="card_name" class="input mt-1.5">
-                                        </div>
-                                        <div>
-                                            <label class="text-gray-400 text-xs uppercase font-semibold">Card Number</label>
-                                            <input type="text" name="card_number" class="input mt-1.5" maxlength="19">
-                                        </div>
-                                        <div class="grid grid-cols-2 gap-4">
-                                            <div>
-                                                <label class="text-gray-400 text-xs uppercase font-semibold">Expiry Date</label>
-                                                <input type="text" name="card_expiry" class="input mt-1.5" placeholder="MM/YY">
-                                            </div>
-                                            <div>
-                                                <label class="text-gray-400 text-xs uppercase font-semibold">CVC / CVV</label>
-                                                <input type="password" name="card_cvv" class="input mt-1.5" maxlength="4">
-                                            </div>
-                                        </div>
+                                    {{-- CARD → STRIPE SECURE PAYMENT --}}
+                                    <div x-show="payment == 'Credit Card'" x-transition x-cloak class="mt-2 bg-black/30 p-5 rounded-2xl border border-white/5">
+                                        <p class="text-gray-300 text-sm flex items-start gap-3">
+                                            <i class="fa-brands fa-stripe text-indigo-400 text-2xl mt-0.5"></i>
+                                            <span>After placing your order, you will be redirected to our <span class="text-white font-semibold">secure Stripe payment page</span> to enter your card details.</span>
+                                        </p>
+                                        <p class="text-gray-500 text-xs mt-3 flex items-center gap-1.5">
+                                            <i class="fa-solid fa-lock text-[10px]"></i> Card data is encrypted and handled by Stripe — it never touches our servers.
+                                        </p>
                                     </div>
 
                                     {{-- JAZZCASH --}}

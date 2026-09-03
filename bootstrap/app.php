@@ -17,6 +17,13 @@ return Application::configure(basePath: dirname(__DIR__))
             'admin' => \App\Http\Middleware\AdminMiddleware::class,
         ]);
 
+        // Stripe calls the webhook server-to-server and cannot send a CSRF
+        // token — the request is authenticated by its Stripe-Signature
+        // header instead (verified inside StripeWebhookController).
+        $middleware->validateCsrfTokens(except: [
+            'stripe/webhook',
+        ]);
+
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

@@ -69,6 +69,19 @@
                             $paymentBadgeClass = 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20';
                             $dotColor = 'bg-emerald-400';
                         }
+                        elseif($order->payment_method === 'Credit Card') {
+                            // Card orders ka asli status Stripe se aata hai (webhook DB mein
+                            // update karta hai) — isliye yahan guess nahi, DB wala status dikhao.
+                            if($order->payment_status === 'Paid') {
+                                $paymentStatus = 'Paid';
+                                $paymentBadgeClass = 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20';
+                                $dotColor = 'bg-emerald-400';
+                            } else {
+                                $paymentStatus = 'Unpaid';
+                                $paymentBadgeClass = 'bg-rose-500/10 text-rose-400 border-rose-500/20';
+                                $dotColor = 'bg-rose-400';
+                            }
+                        }
                         else {
                             $paymentStatus = 'Paid';
                             $paymentBadgeClass = 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20';
