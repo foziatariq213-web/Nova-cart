@@ -12,7 +12,7 @@ Learning project (C:\learning) wale pattern par banaya gaya hai: **PaymentIntent
 4. **Payment ke baad** → Stripe browser ko `/checkout/stripe/return` par wapas bhejta hai. Wahan server-side verify hota hai (secret key se intent retrieve) aur My Orders par success/error message ke sath redirect.
 5. **Webhook** (`POST /stripe/webhook`) → Stripe ke server se aata hai, signature verify hoti hai, `payments` table mein record ban jata hai aur order `Paid` mark hota hai. **Webhook hi source of truth hai** — return page sirf fauri sync ke liye hai (dono idempotent hain, double record nahi banta).
 
-COD, JazzCash, EasyPaisa ka flow bilkul pehle jaisa hai — unko haath nahi lagaya.
+COD ka flow bilkul pehle jaisa hai. (JazzCash/EasyPaisa mock options baad mein hata diye gaye — ab checkout par sirf COD + Credit Card hain, aur backend `in:` validation sirf inhi dono ko accept karti hai.)
 
 ---
 
@@ -76,6 +76,12 @@ Test event bhejne ke liye:
 ```bash
 stripe trigger payment_intent.succeeded
 ```
+
+**Ngrok users ke liye zaroori:** hamesha `127.0.0.1` likhein, `localhost` ya sirf port nahi:
+```bash
+ngrok http --domain=your-static-domain.ngrok-free.dev 127.0.0.1:8000
+```
+Windows par `localhost` IPv6 (`::1`) par resolve hota hai — agar us port par koi aur server (e.g. Docker) bhi ho to ngrok requests wahan chali jati hain aur Stripe ko 404 milta hai.
 
 ---
 

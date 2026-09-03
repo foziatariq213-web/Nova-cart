@@ -279,7 +279,7 @@ Route::middleware('auth')->group(function () {
             'address'        => 'required|string|max:500',
             'city'           => 'required|string|max:100',
             'postal_code'    => 'required|string|max:20',
-            'payment_method' => 'required|string|max:50',
+            'payment_method' => 'required|string|in:Cash on Delivery,Credit Card',
         ]);
 
         $total = 0;
@@ -295,7 +295,7 @@ Route::middleware('auth')->group(function () {
 
         // COD is collected on delivery; card orders stay Unpaid until Stripe
         // confirms the charge (webhook / return page marks them Paid).
-        $paymentStatus = $isCod ? 'Pending' : ($isCard ? 'Unpaid' : 'Paid');
+        $paymentStatus = $isCod ? 'Pending' : 'Unpaid';
 
         $itemsData = [];
         foreach ($cart as $id => $item) {

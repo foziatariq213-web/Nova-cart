@@ -432,41 +432,6 @@
                                         </p>
                                     </div>
 
-                                    {{-- JAZZCASH --}}
-                                    <label class="pay-option flex items-center justify-between p-4" :class="payment == 'JazzCash' ? 'active' : ''">
-                                        <div class="flex items-center gap-4">
-                                            <input type="radio" name="payment_method" value="JazzCash" x-model="payment" class="w-4 h-4 text-indigo-600 bg-black border-white/10 focus:ring-indigo-500">
-                                            <div>
-                                                <p class="text-white font-bold text-sm sm:text-base">JazzCash Mobile Wallet</p>
-                                                <p class="text-gray-400 text-xs sm:text-sm mt-0.5">Pay via instant routing to your mobile wallet app</p>
-                                            </div>
-                                        </div>
-                                        <div class="w-10 h-10 rounded-xl bg-orange-500/10 flex items-center justify-center">
-                                            <i class="fa-solid fa-mobile-screen-button text-orange-400 text-lg"></i>
-                                        </div>
-                                    </label>
-                                    <div x-show="payment == 'JazzCash'" x-transition x-cloak class="mt-2 bg-black/30 p-5 rounded-2xl border border-white/5">
-                                        <label class="text-gray-400 text-xs uppercase font-semibold">JazzCash Registered Mobile Number</label>
-                                        <input type="text" name="jazzcash_number" class="input mt-1.5" placeholder="03XXXXXXXXX">
-                                    </div>
-
-                                    {{-- EASYPAISA --}}
-                                    <label class="pay-option flex items-center justify-between p-4" :class="payment == 'EasyPaisa' ? 'active' : ''">
-                                        <div class="flex items-center gap-4">
-                                            <input type="radio" name="payment_method" value="EasyPaisa" x-model="payment" class="w-4 h-4 text-indigo-600 bg-black border-white/10 focus:ring-indigo-500">
-                                            <div>
-                                                <p class="text-white font-bold text-sm sm:text-base">EasyPaisa Digital Wallet</p>
-                                                <p class="text-gray-400 text-xs sm:text-sm mt-0.5">Pay via instant routing to your mobile wallet app</p>
-                                            </div>
-                                        </div>
-                                        <div class="w-10 h-10 rounded-xl bg-emerald-500/10 flex items-center justify-center">
-                                            <i class="fa-solid fa-wallet text-emerald-400 text-lg"></i>
-                                        </div>
-                                    </label>
-                                    <div x-show="payment == 'EasyPaisa'" x-transition x-cloak class="mt-2 bg-black/30 p-5 rounded-2xl border border-white/5">
-                                        <label class="text-gray-400 text-xs uppercase font-semibold">EasyPaisa Registered Mobile Number</label>
-                                        <input type="text" name="easypaisa_number" class="input mt-1.5" placeholder="03XXXXXXXXX">
-                                    </div>
                                 </div>
                             </div>
                         </div>
