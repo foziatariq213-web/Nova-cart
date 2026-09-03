@@ -6,17 +6,21 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    public function up()
+    public function up(): void
     {
-        Schema::table('products', function (Blueprint $table) {
-            $table->renameColumn('price', 'new_price');
-        });
+        if (Schema::hasColumn('products', 'price') && !Schema::hasColumn('products', 'new_price')) {
+            Schema::table('products', function (Blueprint $table) {
+                $table->renameColumn('price', 'new_price');
+            });
+        }
     }
 
-    public function down()
+    public function down(): void
     {
-        Schema::table('products', function (Blueprint $table) {
-            $table->renameColumn('new_price', 'price');
-        });
+        if (Schema::hasColumn('products', 'new_price') && !Schema::hasColumn('products', 'price')) {
+            Schema::table('products', function (Blueprint $table) {
+                $table->renameColumn('new_price', 'price');
+            });
+        }
     }
 };
